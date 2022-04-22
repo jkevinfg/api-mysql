@@ -9,7 +9,7 @@ function studentsApi(app) {
     
     //get students
     router.get('/',(req,res) => {
-      const sql = 'select * from students';
+      const sql = 'select * from persona';
       connection.query(sql,(err,rows) => {
         if(err) throw err;
         else {
@@ -21,7 +21,7 @@ function studentsApi(app) {
     //get student id
     router.get('/:studentId',(req,res) => {
       const {studentId} = req.params;
-      const sql = 'select * from students where id_student = ?';
+      const sql = 'select * from persona where nid_persona = ?';
       connection.query(sql,[studentId],(err,rows) => {
         if(err) throw err;
         else {
