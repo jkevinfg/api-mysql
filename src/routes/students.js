@@ -1,7 +1,6 @@
 const express = require('express');
 const connection = require('../config/db')
 
-
 function studentsApi(app) {
 
     const router = express.Router();
@@ -29,8 +28,6 @@ function studentsApi(app) {
         }
       });
     });
-
-
 
 
   }
