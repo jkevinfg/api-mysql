@@ -2,6 +2,11 @@ const express = require('express');
 const app = express();
 const studentsApi = require('./src/routes/students');
 
+
+
+app.use(express.json());
+
+
 //db
 require('./src/config/db');
 
