@@ -1,5 +1,4 @@
 -- database SQL
-
 create table grado(
     nid_grado int not null auto_increment primary key,
     desc_grado varchar(30) not null,
@@ -28,4 +27,22 @@ insert into persona (nom_persona, ape_pate_pers, ape_mate_pers, nid_grado, fecha
 insert into persona (nom_persona, ape_pate_pers, ape_mate_pers, nid_grado, fecha_naci,foto_ruta) values ('Micky', 'Shepherdson', 'Marconi', 6, '2010-11-16','src/uploads/foto/user-default.png');
 insert into persona (nom_persona, ape_pate_pers, ape_mate_pers, nid_grado, fecha_naci,foto_ruta) values ('Robin', 'Carlsen', 'Brigshaw', 8, '2014-08-09','src/uploads/foto/user-default.png');
 insert into persona (nom_persona, ape_pate_pers, ape_mate_pers, nid_grado, fecha_naci,foto_ruta) values ('Kerstin', 'Robelow', 'Wem', 7, '2015-01-23','src/uploads/foto/user-default.png');
+
+--- store procedures create persona
+USE school;
+
+delimiter //
+CREATE PROCEDURE personaAddOrEdit(
+    IN _nom_persona varchar(50),
+    IN _ape_pate_pers varchar(50),
+    IN _ape_mate_pers varchar(50),
+    IN _nid_grado int,
+    IN _fecha_naci date,
+    IN _foto_ruta varchar(255)
+)
+begin
+    INSERT into persona (nom_persona,ape_pate_pers,ape_mate_pers,nid_grado,fecha_naci , foto_ruta)
+    VALUES (_nom_persona,_ape_pate_pers,_ape_mate_pers,_nid_grado,_fecha_naci , _foto_ruta);
+end//
+delimiter ;
 

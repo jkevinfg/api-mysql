@@ -13,8 +13,8 @@ require('./src/config/db');
 //routes
 studentsApi(app);
 
-app.listen(process.env.PORT || 3000,() => {
-    console.log('Server on port 3000')
+app.listen(process.env.PORT || 8000,() => {
+    console.log('Server on port 8000')
 });
 
 
