@@ -28,11 +28,12 @@ insert into persona (nom_persona, ape_pate_pers, ape_mate_pers, nid_grado, fecha
 insert into persona (nom_persona, ape_pate_pers, ape_mate_pers, nid_grado, fecha_naci,foto_ruta) values ('Robin', 'Carlsen', 'Brigshaw', 8, '2014-08-09','src/uploads/foto/user-default.png');
 insert into persona (nom_persona, ape_pate_pers, ape_mate_pers, nid_grado, fecha_naci,foto_ruta) values ('Kerstin', 'Robelow', 'Wem', 7, '2015-01-23','src/uploads/foto/user-default.png');
 
---- store procedures create persona
+--- store procedures create or edit persona
 USE school;
 
-delimiter //
+delimiter $$
 CREATE PROCEDURE personaAddOrEdit(
+    IN _id int,
     IN _nom_persona varchar(50),
     IN _ape_pate_pers varchar(50),
     IN _ape_mate_pers varchar(50),
@@ -41,8 +42,21 @@ CREATE PROCEDURE personaAddOrEdit(
     IN _foto_ruta varchar(255)
 )
 begin
-    INSERT into persona (nom_persona,ape_pate_pers,ape_mate_pers,nid_grado,fecha_naci , foto_ruta)
-    VALUES (_nom_persona,_ape_pate_pers,_ape_mate_pers,_nid_grado,_fecha_naci , _foto_ruta);
-end//
+    if _id = 0 then
+        INSERT into persona (nom_persona,ape_pate_pers,ape_mate_pers,nid_grado,fecha_naci , foto_ruta)
+        VALUES (_nom_persona,_ape_pate_pers,_ape_mate_pers,_nid_grado,_fecha_naci , _foto_ruta);
+        SET _ID = LAST_INSERT_ID();
+    else
+        UPDATE persona
+        SET 
+            nom_persona = _nom_persona,
+            ape_pate_pers = _ape_pate_pers, 
+            ape_mate_pers = _ape_mate_pers,
+            nid_grado = _nid_grado,
+            fecha_naci = _fecha_naci,
+            foto_ruta = _foto_ruta
+        WHERE id = _id;
+    end if;
+end$$
 delimiter ;
 
