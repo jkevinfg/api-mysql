@@ -16,3 +16,21 @@ connection.connect((err) => {
 });
 
 module.exports = connection;
+
+
+connection.query(sql,[studentId],(err,rows) => {
+    if(err) throw err;
+    else {
+      res.json(rows);
+    }
+  });
+
+
+  const sql = `select * from ${table}`
+      this.connect.query(sql,(err,rows) => {
+        if(err) throw err;
+        else {
+          return res.json(rows);
+        }
+      });
+     }

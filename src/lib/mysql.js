@@ -7,6 +7,7 @@ const DB_NAME = config.dbName;
 
 
 class MysqlLib {
+
     constructor() {
       this.establishedConnection = null;
       this.host = HOST;
@@ -14,15 +15,17 @@ class MysqlLib {
       this.dbname = DB_NAME;
       this.dbpassword = PASSWORD;
     }
+
     connection() {
       return new Promise((resolve, reject) => {
-        resolve(mysql.createConnection({
+       resolve(mysql.createConnection({
           host: this.host,
           user: this.user,
           password: this.dbpassword,
           database: this.dbname,
         }))
-      })
+       }
+      )
     }
   
     connect() {
@@ -32,8 +35,9 @@ class MysqlLib {
             if (err) {
               this.dropConnection();
               throw err;
+            }else {
+              return 'true'
             }
-            console.log(res.state, "connected")
           })
         });
       }
@@ -49,6 +53,15 @@ class MysqlLib {
         this.establishedConnection = null;
       }
     }
+
+    async getAll(table) {
+      const sql = `select * from ${table}`;
+      if(this.connect() === 'true'){
+        console.log('hola')
+      }
+    }
+
+
   }
 
 module.exports = MysqlLib;

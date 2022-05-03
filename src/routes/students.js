@@ -1,20 +1,18 @@
 const express = require('express');
-const connection = require('../config/db')
+const StudentsService = require('../services/students');
+
 
 function studentsApi(app) {
   
     const router = express.Router();
     app.use('/api/students', router);
+
+    const studentsService = new StudentsService();
     
     //get students
-    router.get('/',(req,res) => {
-      const sql = 'select * from persona';
-      connection.query(sql,(err,rows) => {
-        if(err) throw err;
-        else {
-          res.json(rows)
-        }
-      });
+    router.get('/', async (req,res) => {
+      const students = await studentsService.getStudents();
+      console.log("hola");
     });
 
     //get student id
