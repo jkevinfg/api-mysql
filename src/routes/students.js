@@ -32,10 +32,10 @@ function studentsApi(app) {
     //insert student
     router.post('/',(req,res) => {
       const {nom_persona, ape_pate_pers,ape_mate_pers,nid_grado,fecha_naci,foto_ruta } = req.body;
-      const sql = `call personaAddOrEdit ( ? , ?, ?, ? , ? ,?);`;  
-      connection.query(sql , [nom_persona,ape_pate_pers,ape_mate_pers,nid_grado,fecha_naci,foto_ruta] , (err,rows) => {
+      const sql = `call personaAddOrEdit (?, ? , ?, ?, ? , ? ,?);`; 
+      connection.query(sql , [0, nom_persona,ape_pate_pers,ape_mate_pers,nid_grado,fecha_naci,foto_ruta] , (err,rows) => {
         if(!err) {
-          res.json({status: 'Person saved'});
+          res.json({status: 'Student saved'});
         } else {
           console.log(err);
         }
@@ -43,11 +43,20 @@ function studentsApi(app) {
     })
 
     //edit student
+    router.put('/:studentId',(req,res) => {
+      const {studentId } = req.params;
+      const {nom_persona, ape_pate_pers,ape_mate_pers,nid_grado,fecha_naci,foto_ruta}  = req.body;
+      const sql = `call personaAddOrEdit (?, ? , ?, ?, ? , ? ,?);`;
+      connection.query(sql, [studentId,nom_persona,ape_pate_pers,ape_mate_pers,nid_grado,fecha_naci,foto_ruta], (err,rows) => {
+        if(!err) {
+          res.json({statud:'Student edit'})
+        } else {
+          console.log(err);
+        }
+      })
+    })
 
-
-
-
-
+    
     //delete
 
   }
