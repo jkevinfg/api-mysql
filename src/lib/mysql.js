@@ -45,8 +45,9 @@ class MysqlLib {
 
      getAll(table){
         const sql = `select * from ${table}`
-        this.connectMysql()
-      
+      this.connectMysql().then(db => {
+        console.log(db)
+      })
       }
 
 
