@@ -12,7 +12,7 @@ function studentsApi(app) {
     //get students
     router.get('/', async (req,res) => {
       const students = await studentsService.getStudents();
-      console.log(students)
+      
     });
 
     //get student id

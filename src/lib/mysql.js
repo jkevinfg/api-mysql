@@ -5,11 +5,10 @@ const PASSWORD = encodeURIComponent(config.dbPassword);
 const HOST = config.dbHost;
 const DB_NAME = config.dbName;
 
-
 class MysqlLib {
 
     constructor() {
-      this.status = null
+      this.state = null
       this.client =  mysql.createConnection({
                         host:  HOST,
                         user:  USER,
@@ -19,8 +18,8 @@ class MysqlLib {
     }
 
     connectMysql(){
-      if(!this.status) {
-        this.status = new Promise((resolve,reject) => {
+      if(!this.state) {
+        this.state = new Promise((resolve,reject) => {
           this.client.connect(err => {
             if(err){
               this.dropConnection();
@@ -31,6 +30,7 @@ class MysqlLib {
           })
         })
       }
+      return this.state
     }
 
     dropConnection() {
@@ -39,19 +39,16 @@ class MysqlLib {
           res.end();
           console.log(res.state, 'connection dropped');
         });
-        this.establishedConnection = null;
+        this.state = null;
       }
     }
 
-     getAll(table){
-        const sql = `select * from ${table}`
-      this.connectMysql().then(db => {
-        console.log(db)
-      })
-      }
-
-
-
+    getAll(table){
+       const sql = `select * from ${table}`
+       this.connectMysql().then(db => {
+         console.log(db)
+       })
+    }
 
 }
 
