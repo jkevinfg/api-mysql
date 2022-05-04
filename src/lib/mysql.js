@@ -9,60 +9,50 @@ const DB_NAME = config.dbName;
 class MysqlLib {
 
     constructor() {
-      this.establishedConnection = null;
-      this.host = HOST;
-      this.user = USER;
-      this.dbname = DB_NAME;
-      this.dbpassword = PASSWORD;
+      this.status = null
+      this.client =  mysql.createConnection({
+                        host:  HOST,
+                        user:  USER,
+                        password: PASSWORD,
+                        database: DB_NAME,
+       })
     }
 
-    connection() {
-      return new Promise((resolve, reject) => {
-       resolve(mysql.createConnection({
-          host: this.host,
-          user: this.user,
-          password: this.dbpassword,
-          database: this.dbname,
-        }))
-       }
-      )
-    }
-  
-    connect() {
-      if (!this.establishedConnection) {
-        this.establishedConnection = this.connection().then(res => {
-          res.connect(function(err) {
-            if (err) {
+    connectMysql(){
+      if(!this.status) {
+        this.status = new Promise((resolve,reject) => {
+          this.client.connect(err => {
+            if(err){
               this.dropConnection();
-              throw err;
+              reject(err);
             }else {
-              return 'true'
+              resolve(this.client)
             }
           })
-        });
+        })
       }
     }
-  
+
     dropConnection() {
-      if (this.establishedConnection) {
-        this.establishedConnection.then(res => {
+      if (this.status) {
+        this.status.then(res => {
           res.end();
           console.log(res.state, 'connection dropped');
         });
-        
         this.establishedConnection = null;
       }
     }
 
-    async getAll(table) {
-      const sql = `select * from ${table}`;
-      if(this.connect() === 'true'){
-        console.log('hola')
+     getAll(table){
+        const sql = `select * from ${table}`
+        this.connectMysql()
+      
       }
-    }
 
 
-  }
+
+
+}
 
 module.exports = MysqlLib;
 

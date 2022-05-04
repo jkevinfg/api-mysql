@@ -8,7 +8,7 @@ class StudentsService {
     }
 
     async getStudents() {
-        const students = await this.mySQL.getAll('persona');
+        const students = await this.mySQL.getAll(this.table);
         return students ;
     }
 
