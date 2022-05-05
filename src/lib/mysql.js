@@ -43,14 +43,17 @@ class MysqlLib {
       }
     }
 
-    getAll(table){
+     getAll(table){
        const sql = `select * from ${table}`
        this.connectMysql().then(db => {
-         console.log(db)
-       })
+          db.query( sql,(err,rows) => {
+            return rows
+          })
+        })
     }
 
 }
 
 module.exports = MysqlLib;
+
 
