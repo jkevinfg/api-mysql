@@ -7,53 +7,87 @@ const DB_NAME = config.dbName;
 
 class MysqlLib {
 
-    constructor() {
-      this.state = null
-      this.client =  mysql.createConnection({
-                        host:  HOST,
-                        user:  USER,
-                        password: PASSWORD,
-                        database: DB_NAME,
-       })
-    }
+  constructor() {
+    this.establishedConnection = null;
+    this.dbname = DB_NAME;
+    this.dbpassword = PASSWORD;
+  }
 
-    connectMysql(){
-      if(!this.state) {
-        this.state = new Promise((resolve,reject) => {
-          this.client.connect(err => {
-            if(err){
-              this.dropConnection();
-              reject(err);
-            }else {
-              resolve(this.client)
-            }
-          })
+  connection() {
+    return new Promise((resolve, reject) => {
+      resolve(mysql.createConnection({
+        host: HOST,
+        user: USER,
+        password: this.dbpassword,
+        database: this.dbname,
+      }))
+    })
+  }
+
+  connect() {
+    if (!this.establishedConnection) {
+      this.establishedConnection = this.connection().then(res => {
+        res.connect(function(err) {
+          if (err) {
+            this.dropConnection();
+            throw err;
+          }         
+          return res
         })
-      }
-      return this.state
+        
+      });
     }
+    return this.connection()
+  }
 
-    dropConnection() {
-      if (this.status) {
-        this.status.then(res => {
-          res.end();
-          console.log(res.state, 'connection dropped');
-        });
-        this.state = null;
-      }
+  dropConnection() {
+    if (this.establishedConnection) {
+      this.establishedConnection.then(res => {
+        res.end();
+        console.log(res.state, 'connection dropped');
+      });
+      
+      this.establishedConnection = null;
     }
+  }
 
-     getAll(table){
-       const sql = `select * from ${table}`
-       this.connectMysql().then(db => {
-          db.query( sql,(err,rows) => {
-            return rows
-          })
-        })
-    }
+  getAll(table){
+    const sql = `select * from ${table}`
+    const connectionMysql = this.connect().then(db => {
+      db.query(sql,(err,rows) => {
+        console.log(rows)
+      })      
+    });
+    
+    
+  }
 
 }
 
 module.exports = MysqlLib;
 
 
+/*
+
+
+     getAll(table){
+       const sql = `select * from ${table}`
+       const connection = this.connectMysql().then(db => (db)).then (db => {
+         db.query(sql, (err,rows) => {
+           return rows
+         })
+       })
+
+    }
+ new Promise((resolve,reject) => {
+          db.query( sql,(err,rows) => {
+            if (err){
+              reject(err)
+            }else {
+              console.log(rows)
+              resolve(rows)
+            }
+          })
+        } )
+
+*/

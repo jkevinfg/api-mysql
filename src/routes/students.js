@@ -11,7 +11,7 @@ function studentsApi(app) {
     
     //get students
     router.get('/', async (req,res) => {
-      const students = await studentsService.getStudents();
+      const estudiantes = await studentsService.getStudents()
       
     });
 

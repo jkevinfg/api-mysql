@@ -4,7 +4,6 @@ const { config } = require('./src/config/index');
 const studentsApi = require('./src/routes/students');
 
 
-
 app.use(express.json());
 
 
